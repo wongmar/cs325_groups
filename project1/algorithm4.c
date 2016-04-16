@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 clock_t time_start, time_stop, run_time;
@@ -6,24 +8,24 @@ clock_t time_start, time_stop, run_time;
 
 
 /* ***************************************************************
-*			FUNCTION DECLARATIONS			 *
+*					  FUNCTION DECLARATIONS						 *
 *************************************************************** */
 
 
 int max_sum_subArray_4(int* array);
 int* parseArray(char* line);
-int getLine(FILE* file);
+void getLine(FILE* file);
 FILE* openFile(const char* filname);
 
 
 
 /* ***************************************************************
-*		   	    MAIN FUNCTION			 *
+*						  MAIN FUNCTION							 *
 *************************************************************** */
 
 
  int main(){
-	 
+ 
 	const char* fileIn = "MSS_TestProblems.txt";
 	const char* fileOut = "MSS_TestResults.txt";
 	FILE *fpIn, *fpOut;
@@ -36,13 +38,10 @@ FILE* openFile(const char* filname);
 		printf("\nSuccessfully return pointer to %s: %p\n", fileOut, fpOut);
 	}
 	
+	getLine(fpIn);
+	
 	fclose(fpIn);
 	fclose(fpOut);
-
-	//int array[] =  {-2, -3, 4, -1, -2, 1, 5, -3};
-	//array = readin(file);
-	//int max_sum = max_sum_subArray_4(array);
-	//printf("\nThe maximum contiguous sum is: %d\n\n", max_sum);
    
    return 0;
 }
@@ -50,7 +49,7 @@ FILE* openFile(const char* filname);
 
 
 /* ***************************************************************
-*			SUPPLEMENTAL FUNCTION			 *
+*						SUPPLEMENTAL FUNCTION					 *
 *************************************************************** */
  
 
@@ -70,31 +69,46 @@ int max_sum_subArray_4(int* array){
 }
 
 
-int* parseArray(char* line){
+int* parseArray(char* passedLine){
 	
-	char c;
-	int* array = malloc(256);
+	char* token;
+	char line[256];
+	int nextNum, i = 0;
+	int* parsedArray = malloc(256);
 	
+	memcpy(&line, passedLine, 256);
+	line[0] = ' ';
+	token = strtok(line, ",");
+	
+	while(token != NULL){
+		sscanf(token, "%d", &nextNum);
+		printf("\nNumber: %d", nextNum);
+		parsedArray[i] = nextNum;
+		i++;
+		token = strtok(NULL,",");
+	}
+	printf("\nDone parseArray\n");
+	return parsedArray;
 }
 
 
-int getLine(FILE* file){
+void getLine(FILE* file){
+//void getLine(FILE* inFile, FILE* outFile){
 	
-	char* lineIn = malloc(256);
-	int* parsedArray = malloc(256);
-	while ( fgets(line, sizeof(line), file) != NULL ){
+	char lineIn[256];
+	int* parsedArray;
+	while ( fgets(lineIn, sizeof(lineIn), file) != NULL ){
 		
-		int* parsedArray = parseArray(line);
+		parsedArray = parseArray(lineIn);
 		time_start = clock();
-		int max = max_sum_subArray_4(parseArray);
+		int max = max_sum_subArray_4(parsedArray);
 		time_stop = clock();
-		run_time = ((double)(time_start - time_stop);
+		run_time = ((double)(time_start - time_stop));
 		
 		printf("\nThe max of the array is: %d\nComputed in %d seconds\n", max, run_time);
 	}
 	free(parsedArray);
-	free(lineIn);
-	fclose(file);
+	
 }
 
 
