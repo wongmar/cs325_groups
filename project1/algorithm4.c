@@ -6,16 +6,43 @@ clock_t time_start, time_stop, run_time;
 
 
 /* ***************************************************************
-*		  	    MAIN FUNCTION			 *
+*			FUNCTION DECLARATIONS			 *
+*************************************************************** */
+
+
+int max_sum_subArray_4(int* array);
+int* parseArray(char* line);
+int getLine(FILE* file);
+FILE* openFile(const char* filname);
+
+
+
+/* ***************************************************************
+*		   	    MAIN FUNCTION			 *
 *************************************************************** */
 
 
  int main(){
 	 
+	const char* fileIn = "MSS_TestProblems.txt";
+	const char* fileOut = "MSS_TestResults.txt";
+	FILE *fpIn, *fpOut;
+	
+	if (fpIn = openFile(fileIn)){
+		printf("\nSuccessfully return pointer to %s: %p\n", fileIn, fpIn);
+	}
+	
+	if (fpOut = openFile(fileOut)){
+		printf("\nSuccessfully return pointer to %s: %p\n", fileOut, fpOut);
+	}
+	
+	fclose(fpIn);
+	fclose(fpOut);
+
 	//int array[] =  {-2, -3, 4, -1, -2, 1, 5, -3};
 	//array = readin(file);
-	int max_sum = max_sum_subArray_4(array);
-	printf("\nThe maximum contiguous sum is: %d\n\n", max_sum);
+	//int max_sum = max_sum_subArray_4(array);
+	//printf("\nThe maximum contiguous sum is: %d\n\n", max_sum);
    
    return 0;
 }
@@ -71,10 +98,9 @@ int getLine(FILE* file){
 }
 
 
-FILE* openFile(){
+FILE* openFile(const char* filename){
 	
-	static const char filename[] = "MSS_TestProblems.txt";
-	FILE *file = fopen(filename, "r");
+	FILE *file = fopen(filename, "a+");
 	
 	if(file != NULL){
 		return file;
