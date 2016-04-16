@@ -16,7 +16,6 @@ int max_sum_subArray_4(int* array);
 int* parseArray(char* line);
 void getLine(FILE* file);
 FILE* openFile(const char* filname);
-//float timeRightNow();
 void timeRightNow();
 
 
