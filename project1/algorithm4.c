@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include <sys/time.h>
 
-clock_t time_start, time_stop, run_time;
+struct timeval time_start, time_stop, run_time;
 
 
 
@@ -16,6 +16,8 @@ int max_sum_subArray_4(int* array);
 int* parseArray(char* line);
 void getLine(FILE* file);
 FILE* openFile(const char* filname);
+//float timeRightNow();
+void timeRightNow();
 
 
 
@@ -42,6 +44,8 @@ FILE* openFile(const char* filname);
 	
 	fclose(fpIn);
 	fclose(fpOut);
+	
+	
    
    return 0;
 }
@@ -87,7 +91,6 @@ int* parseArray(char* passedLine){
 		i++;
 		token = strtok(NULL,",");
 	}
-	printf("\nDone parseArray\n");
 	return parsedArray;
 }
 
@@ -96,16 +99,16 @@ void getLine(FILE* file){
 //void getLine(FILE* inFile, FILE* outFile){
 	
 	char lineIn[256];
-	int* parsedArray;
+	int* parsedArray, max;
 	while ( fgets(lineIn, sizeof(lineIn), file) != NULL ){
 		
 		parsedArray = parseArray(lineIn);
-		time_start = clock();
-		int max = max_sum_subArray_4(parsedArray);
-		time_stop = clock();
-		run_time = ((double)(time_start - time_stop));
+		gettimeofday(&time_start, NULL);
+		max = max_sum_subArray_4(parsedArray);
+		gettimeofday(&time_stop, NULL);
 		
-		printf("\nThe max of the array is: %d\nComputed in %d seconds\n", max, run_time);
+		printf("\nThe max of the array is: %d", max);
+		timeRightNow();
 	}
 	free(parsedArray);
 	
@@ -122,6 +125,14 @@ FILE* openFile(const char* filename){
 	else{
 		printf("\nFailed to open %s", filename);
 	}	
+}
+
+
+void timeRightNow(){
+		
+	timersub(&time_stop, &time_start, &run_time);
+	printf("\nComputed in %ld.%06ld\n", (long int)run_time.tv_sec, (long int)run_time.tv_usec);
+
 }
 
 
